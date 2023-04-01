@@ -1,0 +1,28 @@
+Banque_Checker Version History
+
+1.2.0
+Project Structure
+    Rename project to utilXRT
+    Folder restructure
+Functional
+    Connection to MS_Access databases
+
+1.1.0
+Project Structure
+    Messages go into separate py file
+    Version information go into separate py file
+Functional
+    first parameter fixed as execution -option
+
+1.0.0
+Functional Build Released
+Functional
+    Translated last char of the amount in the AFB120
+
+0.8.0
+First Build used in autonomous test
+
+0.0.1
+Project Started
+Project Structure
+    Stardard Project Structure Used
