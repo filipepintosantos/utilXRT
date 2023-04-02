@@ -10,20 +10,16 @@ from array import array
 from datetime import datetime
 #import logging
 import sys
-from utilXRT.psc_crud_msaccess import Connect
-from utilXRT.psc_txt_msgs import psc_msg
-from utilXRT.psc_versiondata import VersionData
+from psc_crud_msaccess import Connect
+from psc_txt_msgs import psc_msg
+#from utilXRT.psc_versiondata import VersionData
 
-info = VersionData()
-program = info.program
-version = info.version
-copyright = info.copyright
-authors = info.authors
-print (program+" - "+version+" - "+copyright+" - "+authors)
+print (psc_msg("version"))
 
 # function to read txt file into list
 def psc_read_txt(filename, fileformat="NONE"):
-    with open("external\\filesin\\" + filename, 'r') as file:
+#    with open("external\\filesin\\" + filename, 'r') as file:
+    with open(filename, 'r') as file:
         content_list = file.readlines()
         content_list = [x.strip() for x in content_list]
         if fileformat == "AFB120":
@@ -74,34 +70,38 @@ def compare_files():
         result = set(list_banque) - set(list_afb120)
         print(list(result))
 
+# begin BEFORE CATCH TEST AREA
+
+# end BEFORE CATCH TEST AREA
+
 # execution block
 try:
-    # TEST AREA
+    # begin TEST AREA
 
-    # TEST AREA
+    # end TEST AREA
 
     # 
     if "-license" in str(sys.argv):
-        psc_msg("license")
+        print(psc_msg("license"))
+
     elif "-h" in str(sys.argv):
-        psc_msg("usage")
-        exit()
-    else:
-        psc_msg("usage")
+        print(psc_msg("usage"))
         exit()
     
-    if sys.argv[1] == "-c" or sys.argv[1] == "-compare":
+    elif sys.argv[1] == "-c" or sys.argv[1] == "-compare":
         compare_files()
-    if sys.argv[1] == "-vRappro":
+
+    elif sys.argv[1] == "-vRappro":
         access_connection = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
         print('Tabelas do banco:')
         for table in access_connection.show_tables():
             print(table.table_name)
+
     else:
-        psc_msg("usage")
+        print(psc_msg("usage"))
         exit()
 
 except SystemExit:
     pass
 except: # catch *all* exceptions
-    psc_msg("usage")
+    print(psc_msg("usage"))

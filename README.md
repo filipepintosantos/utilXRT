@@ -12,6 +12,7 @@ Several validations and fixes to automate Run Procedures
 5 Find (and extract) bad blocks in file (AFB120 / banque)
 
 ### Development plan
+- use docstrings !!!
 - #done# rename project
 - improve project structure
 - #done# setup environment
@@ -58,4 +59,4 @@ Several validations and fixes to automate Run Procedures
 # pyinstaller --onefile utilXRT.py
 
 ### RUN PROGRAM SCRIPT
-# python utilXRT -option file_one file_two
+# python utilXRT\utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
