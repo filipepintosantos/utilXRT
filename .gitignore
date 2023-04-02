@@ -2,6 +2,7 @@
 /__pycache__/
 /build/
 /dist/
+/tests/__pycache__/
 /utilXRT/__pycache__/
 /venv/
 *.spec
