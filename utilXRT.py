@@ -10,9 +10,9 @@ from array import array
 from datetime import datetime
 #import logging
 import sys
-from psc_crud_msaccess import Connect
-from psc_txt_msgs import psc_msg
-#from utilXRT.psc_versiondata import VersionData
+from psc_library.psc_crud_msaccess import Connect
+from psc_library.psc_txt_msgs import psc_msg
+#from psc_library.psc_versiondata import VersionData
 
 print (psc_msg("version"))
 

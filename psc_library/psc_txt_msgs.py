@@ -6,7 +6,7 @@ Library for text messages
 @Author: Filipe Santos
 """
 
-from psc_versiondata import VersionData
+from .psc_versiondata import VersionData
 
 info = VersionData()
 program = info.program
@@ -18,7 +18,7 @@ last_update = info.last_update
 def psc_msg(msg_code):
     # standard usage message
     if msg_code == "version":
-        message  = program+" - "+version+" - "+copyright+" - "+authors+" - "+last_update
+        message  = program+" - "+version+" - "+copyright+"\n"+authors+" - "+last_update+"\n"
 
     # standard usage message
     if msg_code == "usage":

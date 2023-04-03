@@ -1,5 +1,5 @@
 call .\venv\scripts\activate
-pyinstaller --onefile utilXRT.py
+pyinstaller --onefile utilXRT\utilXRT.py
 pause
 
 rem 

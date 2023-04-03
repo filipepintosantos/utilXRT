@@ -2,6 +2,8 @@
 /__pycache__/
 /build/
 /dist/
+/*/__pycache__/
+/psc_library/__pycache__/
 /tests/__pycache__/
 /utilXRT/__pycache__/
 /venv/
