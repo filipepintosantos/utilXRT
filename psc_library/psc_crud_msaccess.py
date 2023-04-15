@@ -26,7 +26,8 @@ class Connect:
         self.db = database
         self.pw = password
 
-        self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)};' r'DBQ=C:\Users\filip\OneDrive\Documentos\projects\KProjects\utilXRT\external\databases\bd1.mdb;' r'PWD=MASTER;')
+        self.conn = pyodbc.connect("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";")
+#        self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ=C:\Users\filip\OneDrive\Documentos\projects\KProjects\utilXRT\external\databases\bd1.mdb; PWD=MASTER;')
         self.cur = self.conn.cursor()
 
     def show_tables(self):
@@ -52,11 +53,9 @@ class Connect:
             print('\n[!] Record inserted successfully [!]\n')
 
     def insert_multiple(self, data):
-        """Adiciona varias linhas na tabela.
-        Desta forma não se faz necessário um laço de
-        repetição com vários ``inserts``.
-        :param dados: (list) lista contendo tuplas
-        (tuple) com os dados que serão inseridos.
+        """ Adiciona varias linhas na tabela.
+        Desta forma não se faz necessário um laço de repetição com vários ``inserts``.
+        :param dados: (list) lista contendo tuplas (tuple) com os dados que serão inseridos.
         """
         try:
             self.cur.executemany('''INSERT INTO NomeDaTabela (nome, idade, sexo) VALUES (?, ?, ?)''', data)
@@ -101,7 +100,7 @@ class Connect:
 
 if __name__ == '__main__':
     # Verificar se o driver está instalado.
-    # Se for retornada uma lista varia o driver precisa ser instalado.
+    # Se for retornada uma lista vazia o driver precisa ser instalado.
     print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
 
     # Criando a conexão com o banco.

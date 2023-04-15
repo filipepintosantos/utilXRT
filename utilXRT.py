@@ -16,6 +16,7 @@ from psc_library.psc_txt_msgs import psc_msg
 
 print (psc_msg("version"))
 
+
 # function to read txt file into list
 def psc_read_txt(filename, fileformat="NONE"):
 #    with open("external\\filesin\\" + filename, 'r') as file:

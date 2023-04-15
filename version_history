@@ -1,4 +1,10 @@
-Banque_Checker Version History
+utilXRT Version History
+
+1.2.1
+Project Structure
+    Create Test folder - prepare for pytest
+Functional
+    Use function attributes tp connect to MS_Access databases
 
 1.2.0
 Project Structure
