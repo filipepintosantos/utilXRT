@@ -15,11 +15,10 @@ Several validations and fixes to automate Run Procedures
 
 
 ### Development plan
+- use pytest !!!
 - use docstrings !!!
 - use autosemver ???
-- #done# rename project
 - improve project structure
-- #done# setup environment
 - #done# read AFB120 (arg 0)
 - #done# break AFB120 file into lines of 120 char
 - #done# read banque (arg 1)

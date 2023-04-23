@@ -12,23 +12,11 @@ from datetime import datetime
 import sys
 from psc_library.psc_crud_msaccess import Connect
 from psc_library.psc_txt_msgs import psc_msg
+from psc_library.psc_util import psc_read_text_file
 #from psc_library.psc_versiondata import VersionData
 
 print (psc_msg("version"))
 
-
-# function to read txt file into list
-def psc_read_txt(filename, fileformat="NONE"):
-#    with open("external\\filesin\\" + filename, 'r') as file:
-    with open(filename, 'r') as file:
-        content_list = file.readlines()
-        content_list = [x.strip() for x in content_list]
-        if fileformat == "AFB120":
-            content_string = " ".join(line.rstrip() for line in content_list)
-            content_list = [(content_string[i:i+120]) for i in range(0, len(content_string), 120)]
-        #print(content_list)
-
-    return content_list
 
 # function convert letter to number (for last digit of AFB120 amounts)
 def psc_letter2number(letter):
@@ -45,8 +33,9 @@ def psc_letter2number(letter):
 # main functionality
 def compare_files():
     # call function to read file
-    f_afb120_01 = list(filter(lambda line: line[0:2] == "01", psc_read_txt(sys.argv[2], "AFB120")))
-    f_banque_01 = list(filter(lambda line: line[0:2] == "01", psc_read_txt(sys.argv[3], "BANQUE")))
+    f_afb120_01 = list(filter(lambda line: line[0:2] == "01", psc_read_text_file(sys.argv[2], "AFB120")))
+    f_banque_01 = list(filter(lambda line: line[0:2] == "07", psc_read_text_file(sys.argv[3], "BANQUE")))
+
 
     # build the tables
     list_afb120 = []
@@ -92,7 +81,38 @@ try:
     elif sys.argv[1] == "-c" or sys.argv[1] == "-compare":
         compare_files()
 
-    elif sys.argv[1] == "-vRappro":
+    elif sys.argv[1] == "-vRappro": # Opção Saldos Rappro
+        """
+        Aceder à BD Access - Check
+        Aceder ao ficheiro bancário ou Excel com os extratos - Check
+        Ler todas as linhas 07 - Check
+        Alterar as contas identificadas na BD de saldos
+        """
+        access_connection = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
+        print('Tabelas do banco:')
+        for table in access_connection.show_tables():
+            print(table.table_name)
+        
+        f_banque_07 = list(filter(lambda line: line[0:2] == "07", psc_read_text_file("external\\filesin\\BPI.201509.txt", "BANQUE")))
+        print("Lista com linhas 07 a corrigir")
+        print(f_banque_07)
+
+        list_banque = []
+        for i, val in enumerate(f_banque_07):
+            account_number = val[85:105]
+            balance_date = datetime.strptime(val[139:147], '%Y%m%d').strftime("%Y-%m-%d")
+            balance_amount = float(val[156:173])
+            print(account_number)
+            print(balance_date)
+            print(balance_amount)
+
+    elif sys.argv[1] == "-vRDB": # Opção Saldos RDB
+        """
+        Aceder à BD Access - Check
+        Aceder ao ficheiro bancário ou Excel com os extratos
+        Ler todas as linhas 07
+        Alterar as contas identificadas na BD de saldos
+        """
         access_connection = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
         print('Tabelas do banco:')
         for table in access_connection.show_tables():
