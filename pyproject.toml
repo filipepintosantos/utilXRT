@@ -5,6 +5,3 @@ build-backend = "hatchling.build"
 [project]
 name = "utilXRT"
 readme = "README.md"
-
-[tool.pytest.ini_options]
-junit_family = xunit2

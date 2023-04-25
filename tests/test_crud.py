@@ -6,6 +6,9 @@ test_crud - Tests for CRUD functions
 @Author: Filipe Santos
 """
 
-#from psc_library import psc_crud_msaccess
+import sys
+sys.path.append("..")
+import psc_library.psc_crud_msaccess as psc_access
 import pytest
 
+dir(psc_access.Connect)

@@ -1,5 +1,12 @@
 utilXRT Version History
 
+1.2.2
+Project Structure
+    Trying to get first test running
+    Move I/O functions to psc_util.py
+Functional
+    Manage text files to work with Rappro and RDB options
+
 1.2.1
 Project Structure
     Create Test folder - prepare for pytest

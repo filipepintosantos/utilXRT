@@ -15,28 +15,19 @@ Several validations and fixes to automate Run Procedures
 
 
 ### Development plan
+- improve project structure
 - use pytest !!!
 - use docstrings !!!
 - use autosemver ???
-- improve project structure
-- #done# read AFB120 (arg 0)
-- #done# break AFB120 file into lines of 120 char
-- #done# read banque (arg 1)
-- #done# compare all instances of line 01 (account, date, balance)
-- setup command line activation
--   #done# deal with arguments
--   #done# argument -h for instructions
-- #done# identify amount signal in AFB120
-- logging to everything
+- - automate versioning #.#.# ?
+- use logging !!!
+- use psutil - in logging to add info about system usage
 - save files to database?
 - save output to file or database?
-- review arguments - first arg is for identifying the process to run
-- automate versioning #.#.# ?
 - review arguments definition - update help info
 - version 2 - validate AFB120 blocks
 - options: find account - extract account>; validate blocks; extract bad blocks
 - version 3 - check MT940 with banque
--   #done# connect to MS Access
 - 
 
 ### CREATE VIRTUAL ENVIRONMENT
@@ -64,6 +55,12 @@ Several validations and fixes to automate Run Procedures
 # OR
 # pyinstaller --onefile utilXRT.py
 
-### RUN PROGRAM SCRIPT
+### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ###
 # python utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
-# python utilXRT.py -vRappro
+# python utilXRT.py -vRappro external\databases\db1.mdb external\filesin\BPI.201509.txt
+
+### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
+# cd tests
+# pytest
+# pytest --cov=utilXRT tests/
+# cd ..

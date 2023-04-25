@@ -8,3 +8,4 @@
 /utilXRT/__pycache__/
 /venv/
 *.spec
+utilXRT.log

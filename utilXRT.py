@@ -12,11 +12,14 @@ from datetime import datetime
 import sys
 from psc_library.psc_crud_msaccess import Connect
 from psc_library.psc_txt_msgs import psc_msg
-from psc_library.psc_util import psc_read_text_file
+import psc_library.psc_logging as psc_logs
+import psc_library.psc_util as psc_util
 #from psc_library.psc_versiondata import VersionData
 
 print (psc_msg("version"))
 
+psc_logs.logger.info(psc_msg("version1"))
+psc_logs.logger.info(psc_msg("version2"))
 
 # function convert letter to number (for last digit of AFB120 amounts)
 def psc_letter2number(letter):
@@ -33,8 +36,8 @@ def psc_letter2number(letter):
 # main functionality
 def compare_files():
     # call function to read file
-    f_afb120_01 = list(filter(lambda line: line[0:2] == "01", psc_read_text_file(sys.argv[2], "AFB120")))
-    f_banque_01 = list(filter(lambda line: line[0:2] == "07", psc_read_text_file(sys.argv[3], "BANQUE")))
+    f_afb120_01 = list(filter(lambda line: line[0:2] == "01", psc_util.psc_read_text_file(sys.argv[2], "AFB120")))
+    f_banque_01 = list(filter(lambda line: line[0:2] == "07", psc_util.psc_read_text_file(sys.argv[3], "BANQUE")))
 
 
     # build the tables
@@ -93,7 +96,7 @@ try:
         for table in access_connection.show_tables():
             print(table.table_name)
         
-        f_banque_07 = list(filter(lambda line: line[0:2] == "07", psc_read_text_file("external\\filesin\\BPI.201509.txt", "BANQUE")))
+        f_banque_07 = list(filter(lambda line: line[0:2] == "07", psc_util.psc_read_text_file(sys.argv[3], "BANQUE")))
         print("Lista com linhas 07 a corrigir")
         print(f_banque_07)
 
@@ -120,9 +123,11 @@ try:
 
     else:
         print(psc_msg("usage"))
+        psc_logs.logger.info("Processing finished. Exited")
         exit()
 
 except SystemExit:
-    pass
+    psc_logs.logger.exception("")
 except: # catch *all* exceptions
     print(psc_msg("usage"))
+    psc_logs.logger.exception("")

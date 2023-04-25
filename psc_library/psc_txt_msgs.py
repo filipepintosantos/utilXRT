@@ -20,6 +20,11 @@ def psc_msg(msg_code):
     if msg_code == "version":
         message  = program+" - "+version+" - "+copyright+"\n"+authors+" - "+last_update+"\n"
 
+    if msg_code == "version1":
+        message  = program+" - "+version+" - "+copyright
+    if msg_code == "version2":
+        message  = authors+" - "+last_update
+
     # standard usage message
     if msg_code == "usage":
         message  = "\nUsage: utilXRT -option file.one file.two\h\nType utilXRT -help for help\nType utilXRT -license for full MIT License\n\nOptions:\n   -c or -compare - compare accounts and final balances between file AFB120 and Banque.\n"
