@@ -6,7 +6,8 @@ Library for text messages
 @Author: Filipe Santos
 """
 
-from .psc_versiondata import VersionData
+from psc_library.psc_versiondata import VersionData
+import psc_library.psc_logging as psc_logs
 
 info = VersionData()
 program = info.program
@@ -16,6 +17,8 @@ authors = info.authors
 last_update = info.last_update
 
 def psc_msg(msg_code):
+    psc_logs.logger.debug("psc_txt_msgs.py called with msg_code = "+msg_code)
+
     # standard usage message
     if msg_code == "version":
         message  = program+" - "+version+" - "+copyright+"\n"+authors+" - "+last_update+"\n"
@@ -27,7 +30,7 @@ def psc_msg(msg_code):
 
     # standard usage message
     if msg_code == "usage":
-        message  = "\nUsage: utilXRT -option file.one file.two\h\nType utilXRT -help for help\nType utilXRT -license for full MIT License\n\nOptions:\n   -c or -compare - compare accounts and final balances between file AFB120 and Banque.\n"
+        message  = "\nUsage: utilXRT option file.one file.two\h\nType utilXRT help for help\nType utilXRT license for full MIT License\n\nOptions:\n   compare - compare accounts and final balances between file AFB120 and Banque.\n"
 
 
     # standard license message

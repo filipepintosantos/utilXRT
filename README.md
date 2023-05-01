@@ -28,6 +28,7 @@ Several validations and fixes to automate Run Procedures
 - version 2 - validate AFB120 blocks
 - options: find account - extract account>; validate blocks; extract bad blocks
 - version 3 - check MT940 with banque
+- Convert help message into read from text file
 - 
 
 ### CREATE VIRTUAL ENVIRONMENT
@@ -62,5 +63,5 @@ Several validations and fixes to automate Run Procedures
 ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
 # cd tests
 # pytest
-# pytest --cov=utilXRT tests/
+# pytest --cov=utilXRT
 # cd ..

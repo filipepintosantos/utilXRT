@@ -1,9 +1,17 @@
 utilXRT Version History
 
+1.3.0
+Project Structure
+    Logging - Logging into crud_msaccess
+Functional
+    Option Rappro fully functional
+    Build for autonomous use
+
 1.2.2
 Project Structure
-    Trying to get first test running
+    Pytest running - set first test
     Move I/O functions to psc_util.py
+    Setup Logging - start refactoring
 Functional
     Manage text files to work with Rappro and RDB options
 

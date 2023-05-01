@@ -14,21 +14,23 @@ Driver Access 2016 <https://www.microsoft.com/en-us/download/details.aspx?id=549
 
 import psutil
 import pyodbc
+import psc_library.psc_logging as psc_logs
 
-"""
-    Vamos ter de flexibilizar a conexão à base de dados
-    Colocando a path, o nome do ficheiro e a password como argumentos do connect
-"""
+def check_drivers():
+    print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
 
 class Connect:
-    
     def __init__(self, database, password):
+        psc_logs.logger.debug("Connecting to MS Access database file:")
         self.db = database
         self.pw = password
-
+        self.connection_string = "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";"
+        psc_logs.logger.debug(self.connection_string)
         self.conn = pyodbc.connect("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";")
-#        self.conn = pyodbc.connect(r'DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ=C:\Users\filip\OneDrive\Documentos\projects\KProjects\utilXRT\external\databases\bd1.mdb; PWD=MASTER;')
         self.cur = self.conn.cursor()
+        psc_logs.logger.debug("Connected to MS Access database file:")
+        psc_logs.logger.debug(self.db)
+        
 
     def show_tables(self):
         return self.cur.tables(tableType='TABLE')
@@ -44,13 +46,15 @@ class Connect:
     def insert(self, table, attributes, values):
         try:
             self.cur.execute(f"INSERT INTO {table} {attributes} VALUES {values}")
+            psc_logs.logger.debug("Processing insert")
+            psc_logs.logger.debug(f"INSERT INTO {table} {attributes} VALUES {values}")
         except Exception as e:
-            print('\n[x] Error inserting record [x]\n')
-            print(f'[x] Reverting operation (rollback) [x]: {e}\n')
+            psc_logs.logger.debug(f"Error inserting record: {e}")
             self.conn.rollback()
+            psc_logs.logger.debug("Operation Reversed (rollback)")
         else:
             self.conn.commit()
-            print('\n[!] Record inserted successfully [!]\n')
+            psc_logs.logger.debug("Record inserted successfully")
 
     def insert_multiple(self, data):
         """ Adiciona varias linhas na tabela.
@@ -58,6 +62,8 @@ class Connect:
         :param dados: (list) lista contendo tuplas (tuple) com os dados que serão inseridos.
         """
         try:
+            psc_logs.logger.debug("Processing insert multiple")
+            psc_logs.logger.debug(f"Data supplied {data}")
             self.cur.executemany('''INSERT INTO NomeDaTabela (nome, idade, sexo) VALUES (?, ?, ?)''', data)
         except Exception as e:
             print('\n[x] Error inserting record [x]\n')
@@ -69,22 +75,28 @@ class Connect:
 
     #Read
     def select_record(self, table, attribute, value):
+        psc_logs.logger.debug("Processing select with key")
+        psc_logs.logger.debug(f"SELECT * FROM {table} WHERE {attribute} = '{value}'")
         return self.cur.execute(f"SELECT * FROM {table} WHERE {attribute} = '{value}'").fetchone()
 
     def select_records(self, table, limit=10):
+        psc_logs.logger.debug("Processing select")
+        psc_logs.logger.debug(f"SELECT TOP {limit} * FROM {table}")
         return self.cur.execute(f"SELECT TOP {limit} * FROM {table}").fetchall()
 
     #Update
     def update_record(self, table, key_attribute, key_value, attribute, value):
         try:
             self.cur.execute(f"UPDATE {table} SET {attribute} = '{value}' WHERE {key_attribute} = '{key_value}'")
+            psc_logs.logger.debug("Processing update")
+            psc_logs.logger.debug(f"UPDATE {table} SET {attribute} = '{value}' WHERE {key_attribute} = '{key_value}'")
         except Exception as e:
-            print('\n[x] Error updating record [x]\n')
-            print(f'[x] Reverting operation (rollback) [x]: {e}\n')
+            psc_logs.logger.debug(f"Error updating record: {e}")
+            psc_logs.logger.debug(f"Reverting operation (rollback): {e}")
             self.conn.rollback()
         else:
             self.conn.commit()
-            print('\n[!] Record updated successfully [!]\n')
+            psc_logs.logger.debug("Record updated successfully")
 
     #Delete
     def delete_record(self, table, attribute, value):
@@ -106,7 +118,7 @@ if __name__ == '__main__':
     # Criando a conexão com o banco.
     dbaccess = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\external\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
 
-###TESTS
+###TESTS >>> MOVE INTO TESTS AREA <<<
 
     ### Exibindo as tabelas que estão no banco.
     print('Tabelas do banco:')
