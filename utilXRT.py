@@ -93,8 +93,6 @@ try:
         print(psc_msg("usage"))
         sys.exit()
 
-    print(sys.argv[2])
-
     # Alternative Options - Arg 1
     if sys.argv[1] == "-c" or sys.argv[1] == "compare":
         psc_logs.logger.info(f"Process argument 'compare'.")
@@ -112,10 +110,10 @@ try:
         Alterar as contas identificadas na BD de saldos
         """
         #access_connection = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
-        #access_connection = Connect(sys.argv[2], "MASTER")
-        #access_connection = Connect("bd1.mdb", "MASTER")
-        access_connection = Connect("E:\\utilXRT\\bd1.mdb", "MASTER")
-        #access_connection = Connect("C:\\Users\\Admin\\Documents\\utilXRT\\bd1.mdb", "MASTER")
+        access_connection = Connect(sys.argv[2], "MASTER")
+
+        #access_connection = Connect("E:\\utilXRT\\bd1.mdb", "MASTER")
+        #access_connection = Connect("C:\\temp\\utilXRT\\bd1.mdb", "MASTER")
         print("Select before updates")
         print(access_connection.select_records("SOLDES_RIB_RAPPRO"))
         
@@ -131,15 +129,15 @@ try:
             print(account_number)
             print(balance_date)
             print(balance_amount)
-            access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "DATE_SOLDE", balance_date)
+            access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
             access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "SOLDE", balance_amount)
-            access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "DATE_SOLDE", balance_date)
+            access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
             access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "SOLDE", balance_amount)
 
         print("Select after updates")
         print(access_connection.select_records("SOLDES_RIB_RAPPRO"))
 
-    elif sys.argv[1] == "-vRDB": # Opção Saldos RDB
+    elif sys.argv[1] == "RDB": # Opção Saldos RDB
         """
         Aceder à BD Access - Check
         Aceder ao ficheiro bancário ou Excel com os extratos

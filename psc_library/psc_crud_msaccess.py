@@ -14,24 +14,42 @@ Driver Access 2016 <https://www.microsoft.com/en-us/download/details.aspx?id=549
 
 import psutil
 import pyodbc
+import os
 import psc_library.psc_logging as psc_logs
 
 def check_drivers():
-    print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
+    #print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
+    print([x for x in pyodbc.drivers()])
+    psc_logs.logger.debug([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
 
 class Connect:
     def __init__(self, database, password):
         psc_logs.logger.debug("Connecting to MS Access database file:")
-        self.db = database
-        self.pw = password
-        self.connection_string = "DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";"
-        psc_logs.logger.debug(self.connection_string)
-        self.conn = pyodbc.connect("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";")
-        self.cur = self.conn.cursor()
-        psc_logs.logger.debug("Connected to MS Access database file:")
-        psc_logs.logger.debug(self.db)
-        
+        if database.find(':') < 0:
+            self.db = os.getcwd() + "\\" + database
+        else:
+            self.db = database
 
+        self.pw = password
+        self.driver = "{Microsoft Access Driver (*.mdb, *.accdb)}"
+        ###
+        ### get full path to database if database doesn't have a ':'
+        ### put this inside a try catch for possible errors
+        ###           file not found
+        ###           driver not present
+        ###
+
+        psc_logs.logger.debug(rf"DRIVER={self.driver}; " rf"DBQ={self.db}; " rf"PWD={self.pw};")
+        self.conn = pyodbc.connect(rf"DRIVER={self.driver}; " rf"DBQ={self.db}; " rf"PWD={self.pw};")
+        #self.conn = pyodbc.connect("DRIVER={Microsoft Access Driver (*.mdb, *.accdb)}; DBQ="+database+"; PWD="+password+";")
+
+        # ODBC User DSN
+        #self.conn = pyodbc.connect(f"DSN={database}")
+
+        self.cur = self.conn.cursor()
+        psc_logs.logger.info("Connected to MS Access database file:") # Change this if it works
+        psc_logs.logger.info(self.db)
+        
     def show_tables(self):
         return self.cur.tables(tableType='TABLE')
 
@@ -45,16 +63,16 @@ class Connect:
     #Create
     def insert(self, table, attributes, values):
         try:
-            self.cur.execute(f"INSERT INTO {table} {attributes} VALUES {values}")
             psc_logs.logger.debug("Processing insert")
             psc_logs.logger.debug(f"INSERT INTO {table} {attributes} VALUES {values}")
+            self.cur.execute(f"INSERT INTO {table} {attributes} VALUES {values}")
         except Exception as e:
             psc_logs.logger.debug(f"Error inserting record: {e}")
             self.conn.rollback()
             psc_logs.logger.debug("Operation Reversed (rollback)")
         else:
             self.conn.commit()
-            psc_logs.logger.debug("Record inserted successfully")
+            psc_logs.logger.debug("Record inserted successfully!")
 
     def insert_multiple(self, data):
         """ Adiciona varias linhas na tabela.
@@ -74,41 +92,43 @@ class Connect:
             print('\n[!] Record inserted successfully [!]\n')
 
     #Read
-    def select_record(self, table, attribute, value):
-        psc_logs.logger.debug("Processing select with key")
-        psc_logs.logger.debug(f"SELECT * FROM {table} WHERE {attribute} = '{value}'")
-        return self.cur.execute(f"SELECT * FROM {table} WHERE {attribute} = '{value}'").fetchone()
-
     def select_records(self, table, limit=10):
         psc_logs.logger.debug("Processing select")
         psc_logs.logger.debug(f"SELECT TOP {limit} * FROM {table}")
         return self.cur.execute(f"SELECT TOP {limit} * FROM {table}").fetchall()
 
+    def select_record(self, table, attribute, value):
+        psc_logs.logger.debug("Processing select with key")
+        psc_logs.logger.debug(f"SELECT * FROM {table} WHERE {attribute} = '{value}'")
+        return self.cur.execute(f"SELECT * FROM {table} WHERE {attribute} = '{value}'").fetchone()
+
     #Update
     def update_record(self, table, key_attribute, key_value, attribute, value):
         try:
-            self.cur.execute(f"UPDATE {table} SET {attribute} = '{value}' WHERE {key_attribute} = '{key_value}'")
             psc_logs.logger.debug("Processing update")
-            psc_logs.logger.debug(f"UPDATE {table} SET {attribute} = '{value}' WHERE {key_attribute} = '{key_value}'")
+            psc_logs.logger.debug(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}'")
+            self.cur.execute(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}'")
         except Exception as e:
             psc_logs.logger.debug(f"Error updating record: {e}")
-            psc_logs.logger.debug(f"Reverting operation (rollback): {e}")
             self.conn.rollback()
+            psc_logs.logger.debug("Operation Reversed (rollback)")
         else:
             self.conn.commit()
-            psc_logs.logger.debug("Record updated successfully")
+            psc_logs.logger.debug("Record updated successfully!")
 
     #Delete
     def delete_record(self, table, attribute, value):
         try:
+            psc_logs.logger.debug("Processing delete")
+            psc_logs.logger.debug(f"DELETE FROM {table} WHERE {attribute}='{value}'")
             self.cur.execute(f"DELETE FROM {table} WHERE {attribute}='{value}'")
         except Exception as e:
-            print('\n[x] Error deleting record [x]\n')
-            print(f'[x] Reverting operation (rollback) [x]: {e}\n')
+            psc_logs.logger.debug(f"Error deleting record: {e}")
             self.conn.rollback()
+            psc_logs.logger.debug("Operation Reversed (rollback)")
         else:
             self.conn.commit()
-            print('\n[!] Record deleted successfully [!]\n')
+            psc_logs.logger.debug("Record deleted successfully!")
 
 if __name__ == '__main__':
     # Verificar se o driver está instalado.

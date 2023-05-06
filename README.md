@@ -22,13 +22,17 @@ Several validations and fixes to automate Run Procedures
 - - automate versioning #.#.# ?
 - use logging !!!
 - use psutil - in logging to add info about system usage
+- 
+- get full path for msaccess database
+- Convert help message into read from text file
+- Pass crud_msaccess tests to Test Area
+- 
 - save files to database?
 - save output to file or database?
 - review arguments definition - update help info
 - version 2 - validate AFB120 blocks
 - options: find account - extract account>; validate blocks; extract bad blocks
 - version 3 - check MT940 with banque
-- Convert help message into read from text file
 - 
 
 ### CREATE VIRTUAL ENVIRONMENT
