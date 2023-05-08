@@ -114,7 +114,9 @@ class Connect:
             psc_logs.logger.debug("Operation Reversed (rollback)")
         else:
             self.conn.commit()
-            psc_logs.logger.debug("Record updated successfully!")
+            psc_logs.logger.debug(f"{self.cur.rowcount} Records updated!")
+            if self.cur.rowcount != 0:
+                psc_logs.logger.debug("Record updated successfully!")
 
     #Delete
     def delete_record(self, table, attribute, value):

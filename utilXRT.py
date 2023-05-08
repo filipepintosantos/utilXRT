@@ -107,15 +107,13 @@ try:
         Aceder à BD Access - Check
         Aceder ao ficheiro bancário ou Excel com os extratos - Check
         Ler todas as linhas 07 - Check
-        Alterar as contas identificadas na BD de saldos
+        Alterar as contas identificadas na BD de saldos - Check
         """
-        #access_connection = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
         access_connection = Connect(sys.argv[2], "MASTER")
 
-        #access_connection = Connect("E:\\utilXRT\\bd1.mdb", "MASTER")
-        #access_connection = Connect("C:\\temp\\utilXRT\\bd1.mdb", "MASTER")
         print("Select before updates")
-        print(access_connection.select_records("SOLDES_RIB_RAPPRO"))
+        for i, val in enumerate(access_connection.select_records("SOLDES_RIB_RAPPRO")):
+            print(val)
         
         f_banque_07 = list(filter(lambda line: line[0:2] == "07", psc_util.psc_read_text_file(sys.argv[3], "BANQUE")))
         print("Lista com linhas 07 a corrigir")
@@ -123,19 +121,25 @@ try:
 
         list_banque = []
         for i, val in enumerate(f_banque_07):
-            account_number = val[85:105]
+            account_number = val[84:105]
             balance_date = datetime.strptime(val[139:147], '%Y%m%d').strftime("%d%m%y")
             balance_amount = float(val[156:173])
             print(account_number)
-            print(balance_date)
-            print(balance_amount)
-            access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
-            access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "SOLDE", balance_amount)
-            access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
-            access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "SOLDE", balance_amount)
+            psc_logs.logger.info(f"Fixing balance for Account {account_number}")
+            search_account = access_connection.select_record("SOLDES_RIB_RAPPRO", 'RIB', account_number)
+            if search_account == None:
+                psc_logs.logger.info("Account not found in Table SOLDES_RIB_RAPPRO. Skipping.")
+            else:
+                print(balance_date)
+                print(balance_amount)
+                access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
+                access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "SOLDE", balance_amount)
+                access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'")
+                access_connection.update_record("SOLDES_RIB_TRESO", "RIB", account_number, "SOLDE", balance_amount)
 
         print("Select after updates")
-        print(access_connection.select_records("SOLDES_RIB_RAPPRO"))
+        for i, val in enumerate(access_connection.select_records("SOLDES_RIB_RAPPRO")):
+            print(val)
 
     elif sys.argv[1] == "RDB": # Opção Saldos RDB
         """

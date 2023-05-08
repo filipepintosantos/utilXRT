@@ -9,8 +9,8 @@ VersionData
 class VersionData:
     def __init__(self):
         self.program = "utilXRT"
-        self.version = "@Version: 1.3.1"
+        self.version = "@Version: 1.3.2"
         self.copyright = "Copyright (c) [2023]"
         self.authors = "PSC - Pinto Santos Consultores"
-        self.last_update = "2023-05-06"
+        self.last_update = "2023-05-08"
 
