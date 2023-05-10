@@ -1,6 +1,6 @@
 call .\venv\scripts\activate
 pyinstaller --onefile utilXRT.py
-pyinstaller --onefile --name utilXRT(x86).exe utilXRT.py
+pyinstaller --onefile --name utilXRT32.exe utilXRT.py
 pause
 
 rem 
@@ -10,5 +10,7 @@ rem git add .
 rem git commit -m "Short changes description"
 rem git push origin master
 rem 
-rem git pull # use on vm
+rem # use on vm - Commit if necessary then Pull
+rem git commit -m "Short changes description"
+rem git pull --force
 rem 

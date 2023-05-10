@@ -23,7 +23,7 @@ Several validations and fixes to automate Run Procedures
 - use logging !!!
 - use psutil - in logging to add info about system usage
 - 
-- get full path for msaccess database
+- get full path for msaccess database ##DONE##
 - Convert help message into read from text file
 - Pass crud_msaccess tests to Test Area
 - 
@@ -62,7 +62,7 @@ Several validations and fixes to automate Run Procedures
 
 ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ###
 # python utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
-# python utilXRT.py -vRappro external\databases\db1.mdb external\filesin\BPI.201509.txt
+# python utilXRT.py Rappro external\databases\bd1.mdb external\filesin\BPI.201509.txt debug
 
 ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
 # cd tests

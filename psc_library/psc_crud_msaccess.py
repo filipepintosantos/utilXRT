@@ -103,11 +103,11 @@ class Connect:
         return self.cur.execute(f"SELECT * FROM {table} WHERE {attribute} = '{value}'").fetchone()
 
     #Update
-    def update_record(self, table, key_attribute, key_value, attribute, value):
+    def update_record(self, table, key_attribute, key_value, attribute, value, free_where=''):
         try:
             psc_logs.logger.debug("Processing update")
-            psc_logs.logger.debug(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}'")
-            self.cur.execute(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}'")
+            psc_logs.logger.debug(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}' {free_where}")
+            self.cur.execute(f"UPDATE {table} SET {attribute} = {value} WHERE {key_attribute} = '{key_value}' {free_where}")
         except Exception as e:
             psc_logs.logger.debug(f"Error updating record: {e}")
             self.conn.rollback()
