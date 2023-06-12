@@ -40,7 +40,7 @@ def psc_msg(msg_code):
 
     # standard usage message
     elif msg_code == "usage":
-        message  = "\nUsage: utilXRT option file.one file.two\h\nType utilXRT help for help\nType utilXRT license for full MIT License\n\nOptions:\n   compare - compare accounts and final balances between file AFB120 and Banque.\n"
+        message  = "\nUsage: utilXRT main_option [option_args]\nType utilXRT help for help\nType utilXRT license for full MIT License\n\nOptions:\n\n"
 
     else:
         psc_logs.logger.debug("Message called with invalid argument.")

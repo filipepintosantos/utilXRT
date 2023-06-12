@@ -8,7 +8,22 @@ test_crud - Tests for CRUD functions
 
 import sys
 sys.path.append("..")
-import psc_library.psc_crud_msaccess as psc_access
+sys.path.append("..\\psc_library")
+print(sys.path)
 import pytest
 
-dir(psc_access.Connect)
+# Test MSAccess CRUD
+import psc_library.psc_crud_msaccess as psc_access
+dir(psc_access.connectMSAccess)
+
+connDBAccess = psc_access.connectMSAccess("..\\external\\databases\\bd1.mdb", "MASTER")
+
+print('Tabelas do banco:')
+for table in connDBAccess.show_tables():
+    print(table.table_name)
+
+# Test SQLite CRUD
+import psc_library.psc_crud_sqlite as psc_sqlite
+dir(psc_sqlite.connectSQLite)
+
+connSQLite = psc_sqlite.connectSQLite("..\\external\\databases\\mt940.db")

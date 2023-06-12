@@ -19,10 +19,10 @@ import psc_library.psc_logging as psc_logs
 
 def check_drivers():
     #print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
-    print([x for x in pyodbc.drivers()])
+    print([x+"\n" for x in pyodbc.drivers()])
     psc_logs.logger.debug([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
 
-class Connect:
+class connectMSAccess:
     def __init__(self, database, password):
         psc_logs.logger.debug("Connecting to MS Access database file:")
         if database.find(':') < 0:
@@ -61,7 +61,7 @@ class Connect:
 
     #CRUD - CREATE - READ - UPDATE - DELETE
     #Create
-    def insert(self, table, attributes, values):
+    def insert_record(self, table, attributes, values):
         try:
             psc_logs.logger.debug("Processing insert")
             psc_logs.logger.debug(f"INSERT INTO {table} {attributes} VALUES {values}")
@@ -74,7 +74,7 @@ class Connect:
             self.conn.commit()
             psc_logs.logger.debug("Record inserted successfully!")
 
-    def insert_multiple(self, data):
+    def insert_records(self, data):
         """ Adiciona varias linhas na tabela.
         Desta forma não se faz necessário um laço de repetição com vários ``inserts``.
         :param dados: (list) lista contendo tuplas (tuple) com os dados que serão inseridos.
@@ -138,7 +138,7 @@ if __name__ == '__main__':
     print([x for x in pyodbc.drivers() if x.startswith('Microsoft Access Driver')])
 
     # Criando a conexão com o banco.
-    dbaccess = Connect("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\external\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
+    dbaccess = connectMSAccess("C:\\Users\\filip\\OneDrive\\Documentos\\projects\\KProjects\\external\\utilXRT\\external\\databases\\bd1.mdb", "MASTER")
 
 ###TESTS >>> MOVE INTO TESTS AREA <<<
 

@@ -5,8 +5,8 @@ Several validations and fixes to automate Run Procedures
 
 1 compare AFB120 with XRT banque format (after manual conversion)
 
-2 Validate (and fix) RDB balances
-3 Validate (and fix) Rappro balances
+2 Validate (and fix) Rappro balances
+3 Validate (and fix) RDB balances
 
 4 Find (and extract) account in file (AFB120 / banque / MT940)
 5 Find (and extract) bad blocks in file (AFB120 / banque)
@@ -34,6 +34,13 @@ Several validations and fixes to automate Run Procedures
 - options: find account - extract account>; validate blocks; extract bad blocks
 - version 3 - check MT940 with banque
 - 
+- URGENT DEVELOPMENT for version 1.4.0
+- Fix negativos Rappro - OK
+- Fix negativos RDB - OK
+- Data no RDB é campo 4
+- Mudar selects de default (10) para 5000 - OK
+- Numa fase testes (ou opção debug!!) criar ficheiro com export da BD before e after - OK
+- Comparar os dois e listar as diferenças
 
 ### CREATE VIRTUAL ENVIRONMENT
 # pip install virtualenv
@@ -63,6 +70,8 @@ Several validations and fixes to automate Run Procedures
 ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ###
 # python utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
 # python utilXRT.py Rappro external\databases\bd1.mdb external\filesin\BPI.201509.txt debug
+
+# python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\filesin\MT940\Mzn_A12.MT940 external\filesout\test.txt debug
 
 ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
 # cd tests
