@@ -2,6 +2,7 @@
 /__pycache__/
 /build/
 /dist/
+/external/*/
 /*/__pycache__/
 /psc_library/__pycache__/
 /tests/__pycache__/

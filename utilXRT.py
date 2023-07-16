@@ -6,22 +6,22 @@ Several validations and fixes to automate Run Procedures
 @Author: Filipe Santos
 """
 
-from array import array
-from datetime import datetime
 import sys
 sys.path.append("psc_library")
+from array import array
+from datetime import datetime
 
-from psc_txt_msgs import psc_msg
-import psc_logging as psc_logs
-import psc_util as psc_util
+import psc_library.psc_util as psc_util
+from psc_library.psc_logging import logger
+from psc_library.psc_txt_msgs import psc_msg
 
 print(psc_msg("version"))
-psc_logs.logger.info(psc_msg("version1"))
-psc_logs.logger.info(psc_msg("version2"))
+logger.info(psc_msg("version1"))
+logger.info(psc_msg("version2"))
 
 ### All this should go into a module inside the library
 
-# function convert letter to number (for last digit of AFB120 amounts)
+# function convert letter to number (for last digit of AFB120 amounts) # Move this to psc_util
 def psc_letter2number(letter):
     if letter in ["A", "B", "C", "D", "E", "F", "G", "H", "I", "{"]:
         number = ord(letter)-64
@@ -32,8 +32,6 @@ def psc_letter2number(letter):
     if letter in ["{", "}"]:
         number = 0
     return number, sense
-
-# main functionality
 
 def compare_files(): # Move this to psc_util
     # call function to read file
@@ -65,43 +63,34 @@ def compare_files(): # Move this to psc_util
 
 # execution block
 if len(sys.argv) < 1:
-    psc_logs.logger.info("No Arguments assigned. Exiting")
+    logger.info("No Arguments assigned. Exiting")
     sys.exit()
 else:
-    psc_logs.logger.info("Arguments passed:")
+    logger.info("Arguments passed:")
     for i, val in enumerate(sys.argv):
-        psc_logs.logger.info(f"Arg {i} - {sys.argv[i]}")
-    
+        logger.info(f"Arg {i} - {sys.argv[i]}")
 
-# begin BEFORE CATCH TEST AREA
-
-# end BEFORE CATCH TEST AREA
-
+# main functionalities 
 try:
-    # begin TEST AREA
-
-    # end TEST AREA
-
-    # 
     if "debug" in str(sys.argv):
-        psc_logs.logger.setLevel(psc_logs.logging.getLevelName("DEBUG"))
-        psc_logs.logger.info(f"Logging level changed to {psc_logs.logging.getLevelName}.")
+        logger.set_level("DEBUG")
 
     if "license" in str(sys.argv):
-        psc_logs.logger.info("Process argument 'license'.")
+        logger.info("Process argument 'license'.")
         print(psc_msg("license"))
-
-    if "history" in str(sys.argv):
-        psc_logs.logger.info("Process argument 'history'. Output development history.")
-        print(psc_msg("history"))
-
-    if "help" in str(sys.argv):
-        psc_logs.logger.info("Process argument 'help'.")
-        print(psc_msg("usage"))
         sys.exit()
 
+    if "history" in str(sys.argv):
+        logger.info("Process argument 'history'. Output development history.")
+        print(psc_msg("history"))
+        sys.exit()
+
+    if "help" in str(sys.argv):
+        logger.info("Process argument 'help' / usage.")
+        print(psc_msg("usage"))
+
     # Alternative Options - Arg 1
-    psc_logs.logger.info(f"Process argument '{sys.argv[1]}'.")
+    logger.info(f"Process argument '{sys.argv[1]}'.")
 
     if sys.argv[1] == "-c" or sys.argv[1] == "compare":
         """
@@ -141,13 +130,13 @@ try:
             print(account_number)
             print(balance_date)
             print(balance_amount)
-            psc_logs.logger.info(f"Fixing balance for Account {account_number}")
+            logger.info(f"Fixing balance for Account {account_number}")
             search_account = access_connection.select_record("SOLDES_RIB_RAPPRO", 'RIB', account_number)
             if search_account == None:
-                psc_logs.logger.info("Account not found in Table SOLDES_RIB_RAPPRO. Skipping.")
+                logger.info("Account not found in Table SOLDES_RIB_RAPPRO. Skipping.")
             elif search_account[2] > balance_date:
-                psc_logs.logger.info(f"Date in File {balance_date} < Date in Database {search_account[2]}")
-                psc_logs.logger.info("Balance Date to update is older than Date in Database. Skipping.")
+                logger.info(f"Date in File {balance_date} < Date in Database {search_account[2]}")
+                logger.info("Balance Date to update is older than Date in Database. Skipping.")
             else:
                 access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "SOLDE", balance_amount, f" and DATE_SOLDE <= '{balance_date}'")
                 access_connection.update_record("SOLDES_RIB_RAPPRO", "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'", f" and DATE_SOLDE <= '{balance_date}'")
@@ -190,13 +179,13 @@ try:
             print(account_number)
             print(balance_date)
             print(balance_amount)
-            psc_logs.logger.info(f"Fixing balance for Account {account_number}")
+            logger.info(f"Fixing balance for Account {account_number}")
             search_account = access_connection.select_record(table_rdb, 'RIB', account_number)
             if search_account == None:
-                psc_logs.logger.info(f"Account not found in Table {table_rdb}. Skipping.")
+                logger.info(f"Account not found in Table {table_rdb}. Skipping.")
             elif search_account[2] > balance_date:
-                psc_logs.logger.info(f"Date in File {balance_date} < Date in Database {search_account[2]}")
-                psc_logs.logger.info("Balance Date to update is older than Date in Database. Skipping.")
+                logger.info(f"Date in File {balance_date} < Date in Database {search_account[2]}")
+                logger.info("Balance Date to update is older than Date in Database. Skipping.")
             else:
                 access_connection.update_record(table_rdb, "RIB", account_number, "SOLDE", balance_amount, f" and DATE_SOLDE <= '{balance_date}'")
                 access_connection.update_record(table_rdb, "RIB", account_number, "DATE_SOLDE", f"'{balance_date}'", f" and DATE_SOLDE <= '{balance_date}'")
@@ -210,21 +199,22 @@ try:
 
     elif sys.argv[1] == "CtrlMT940": # Options for analysis of received MT940 statements
         from psc_library.psc_spec_ctrl_mt940 import ctrl_mt940
-        result = ctrl_mt940(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
-        psc_logs.logger.info(result)
-        
+        ctrl_mt940(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
+        result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
+        logger.info(result)
+        print(result)
+                
     else: # No valid options selected.
         print(psc_msg("usage"))
-        psc_logs.logger.info("No valid options selected.")
+        logger.info("No valid options selected.")
 
 except SystemExit:
-    psc_logs.logger.exception("")
+    logger.exception("")
 except FileNotFoundError as e:
-    psc_logs.logger.info("File not found.")
-    psc_logs.logger.exception(f"{e}")
-except: # catch *all* exceptions
-    print(psc_msg("usage"))
-    psc_logs.logger.exception("")
+    logger.info("File not found.")
+    logger.exception(f"{e}")
+except Exception as e: # catch *all* exceptions
+    logger.exception(f"Unexpected Error: {e}")
 
-psc_logs.logger.info("Processing finished. Exited")
+logger.info("Processing finished. Exited")
 sys.exit()

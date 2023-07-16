@@ -1,5 +1,19 @@
 utilXRT Version History
 
+2.0.1
+Project Structure
+    Logging recoded as class
+Functional
+    MT940 Manager - Database inicialization working
+
+2.0.0
+Project Structure
+    Back to start
+    Start developing methods thinking of using unit tests
+    Re-think command line options
+Functional
+    Redefine development plan - main option MT940 Manager
+
 1.3.5
 Project Structure
     New options are out of main py file - prefix spec

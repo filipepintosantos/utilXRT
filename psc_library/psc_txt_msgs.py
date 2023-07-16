@@ -6,8 +6,8 @@ Library for text messages
 @Author: Filipe Santos
 """
 
+from psc_library.psc_logging import logger
 from psc_library.psc_versiondata import VersionData
-import psc_library.psc_logging as psc_logs
 
 info = VersionData()
 program = info.program
@@ -17,7 +17,7 @@ authors = info.authors
 last_update = info.last_update
 
 def psc_msg(msg_code):
-    psc_logs.logger.debug("psc_txt_msgs.py called with msg_code = "+msg_code)
+    log_msg = "psc_txt_msgs.py called with msg_code = "+msg_code
 
     # standard version message
     if msg_code == "version":
@@ -40,9 +40,9 @@ def psc_msg(msg_code):
 
     # standard usage message
     elif msg_code == "usage":
-        message  = "\nUsage: utilXRT main_option [option_args]\nType utilXRT help for help\nType utilXRT license for full MIT License\n\nOptions:\n\n"
+        message  = "\nUsage: utilXRT main_option [option_args]\nType utilXRT help for help (this message)\nType utilXRT license for full MIT License\n\nOptions:\n\n"
 
     else:
-        psc_logs.logger.debug("Message called with invalid argument.")
+        logger.debug("Message called with invalid argument.")
 
     return message

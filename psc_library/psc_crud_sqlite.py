@@ -19,60 +19,65 @@ Delete
 
 import sqlite3 as sql
 import os
-import psc_logging as psc_logs
+from psc_library.psc_logging import logger
 
 class connectSQLite:
     def __init__(self, database):
         self.conn = None
         try:
             self.conn = sql.connect(database)
-            psc_logs.logger.info(sql.version)
+            logger.info(f"SQLite version {sql.version}.")
         
             self.cur = self.conn.cursor()
-            psc_logs.logger.info(f"Connected to SQLite database '{database}'.")
-        except:
-            psc_logs.logger.exception("")
+            logger.info(f"Connected to SQLite database '{database}'.")
+        except Exception as e:
+            logger.exception(f"Error connecting to database {database}: {e}")
     
     def create_table(self, table_name, create_query):
         try:
             self.conn.execute(create_query)
         except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error creating table {table_name}: {e}")
+            logger.exception(f"Error creating table {table_name}: {e}")
+            self.conn.rollback()
         else:
             self.conn.commit()
-            psc_logs.logger.debug(f"Table '{table_name}' created successfully.")
+            logger.debug(f"Table '{table_name}' created successfully.")
 
     def close_conn(self):
         self.conn.close()
-        psc_logs.logger.info("Connection to SQLite database closed.")
+        logger.info("Connection to SQLite database closed.")
 
     #CRUD - CREATE - READ - UPDATE - DELETE
     #Create
     def insert_record(self, table, attributes, values):
         try:
-            pass
-        except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error inserting record: {e}")
+            self.cur.execute(f"INSERT INTO {table} {attributes} VALUES {values}")
+        except Exception as e:
+            logger.debug(f"Error inserting record: {e}")
+            self.conn.rollback()
+            logger.debug("Operation reversed (rollback)")
         else:
-            pass
+            self.conn.commit()
+            logger.debug("Record inserted successfully!")
 
     def insert_records(self, data):
         try:
             pass
         except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error inserting records: {e}")
+            logger.debug(f"Error inserting records: {e}")
         else:
-            pass
+            self.conn.commit()
+            logger.debug("RecordS inserted successfully!")
 
     #Read
     def select_records(self, table, limit=10):
-        psc_logs.logger.debug("Processing select")
-        psc_logs.logger.debug(f"SELECT TOP {limit} * FROM {table}")
+        logger.debug("Processing select")
+        logger.debug(f"SELECT TOP {limit} * FROM {table}")
         return self.cur.execute(f"SELECT TOP {limit} * FROM {table}").fetchall()
 
     def select_record(self, table, attribute, value):
-        psc_logs.logger.debug("Processing select with key")
-        psc_logs.logger.debug(f"SELECT * FROM {table} WHERE {attribute} = '{value}'")
+        logger.debug("Processing select with key")
+        logger.debug(f"SELECT * FROM {table} WHERE {attribute} = '{value}'")
         return self.cur.execute(f"SELECT * FROM {table} WHERE {attribute} = '{value}'").fetchone()
 
     #Update
@@ -80,7 +85,7 @@ class connectSQLite:
         try:
             pass
         except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error updating record: {e}")
+            logger.debug(f"Error updating record: {e}")
         else:
             pass
 
@@ -89,17 +94,17 @@ class connectSQLite:
         try:
             pass
         except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error deleting record: {e}")
+            logger.debug(f"Error deleting record: {e}")
         else:
             pass
 
     #Free SQL Query
     def free_query(self, query):
         try:
-            psc_logs.logger.debug(f"Executing query: {query}")
+            logger.debug(f"Executing query: {query}")
             self.cur.execute(query).fetchall()
         except Exception as e: # catch *all* exceptions
-            psc_logs.logger.debug(f"Error executing query: {e}")
+            logger.debug(f"Error executing query: {e}")
         else:
             self.conn.commit()
-            psc_logs.logger.debug(f"Query executed successfully.")
+            logger.debug(f"Query executed successfully.")

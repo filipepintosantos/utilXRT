@@ -15,6 +15,14 @@ Several validations and fixes to automate Run Procedures
 
 
 ### Development plan
+- MT940 Manager
+- read MT940 from file
+- write MT940 to file - with criteria Account / Sequence / Date - options recode account
+- save MT940 to database - no duplicates - key Account + Statement Sequence
+- list from database by account / statement sequence - with criteria Account / Sequence / Date
+- 
+- Everything below this line is for second plan
+- 
 - improve project structure
 - use pytest !!!
 - use docstrings !!!
@@ -71,6 +79,14 @@ Several validations and fixes to automate Run Procedures
 # python utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
 # python utilXRT.py Rappro external\databases\bd1.mdb external\filesin\BPI.201509.txt debug
 
+### Options for MT940
+# INIT_DB
+# python utilXRT.py CtrlMT940 INIT_DB external\databases\mt940test.db filler filler debug
+# INTEG
+# python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\filesin\MT940\Mzn_A12.MT940 external\filesout\test.txt debug
+# EXTRACT
+# CLEAR_DUPS
+# LOG_L7D
 # python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\filesin\MT940\Mzn_A12.MT940 external\filesout\test.txt debug
 
 ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
