@@ -3,6 +3,7 @@
 /build/
 /dist/
 /external/*/
+/externalbk/*/
 /*/__pycache__/
 /psc_library/__pycache__/
 /tests/__pycache__/
