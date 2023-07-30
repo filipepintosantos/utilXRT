@@ -10,17 +10,17 @@ rem git add .
 rem git commit -m "Short changes description"
 rem git push origin master
 rem 
-rem rem # use on vm - Commit if necessary then Pull
+rem rem # use on vm (32bit) - Commit if necessary then Pull
 rem git commit -m "Short changes description"
 rem git pull --force
 rem 
 
-rem ### CREATE VIRTUAL ENVIRONMENT
+rem ### CREATE VIRTUAL ENVIRONMENT - Done only once on project creation
 rem # pip install virtualenv
 rem # cd KProjects\utilXRT
 rem # virtualenv venv
 
-rem ### ACTIVATE VIRTUAL ENVIRONMENT
+rem ### ACTIVATE VIRTUAL ENVIRONMENT - Done everytime VSC is started
 rem # cd KProjects\utilXRT
 rem # .\venv\scripts\activate
 
