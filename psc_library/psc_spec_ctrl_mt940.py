@@ -23,8 +23,8 @@ validar se já registou o extrato (possiveis duplicados) se sim, guarda em outra
 
 """
 
-import sys
-import psc_logging as psc_logs
+import os
+from datetime import datetime
 import psc_util as psc_util
 from psc_crud_sqlite import connectSQLite
 from psc_logging import logger
@@ -45,17 +45,20 @@ class ctrl_mt940:
         # laststatementdate TEXT NOT NULL, 
         # expected INT NOT NULL
         table_accounts = ("account", "iban", "laststatementdate", "expected")
-        # table "IntegratedFiles" : "CREATE TABLE IF NOT EXISTS IntegratedFiles (id INTEGER PRIMARY KEY AUTOINCREMENT, integratedfile TEXT NOT NULL, filename TEXT NOT NULL, filedate TEXT NOT NULL, integrationdate TEXT NOT NULL); CREATE UNIQUE INDEX IntegratedFiles_integratedfile on IntegratedFiles(integratedfile);"
+        # table "IntegratedFiles" : "CREATE TABLE IF NOT EXISTS IntegratedFiles (id INTEGER PRIMARY KEY AUTOINCREMENT, integratedfile TEXT NOT NULL, filename TEXT NOT NULL, filedate TEXT NOT NULL, totalstatements INT NOT NULL, integrationdate TEXT NOT NULL); CREATE UNIQUE INDEX IntegratedFiles_integratedfile on IntegratedFiles(integratedfile);"
         # id INTEGER PRIMARY KEY AUTOINCREMENT, 
         # integratedfile TEXT NOT NULL, 
         # filename TEXT NOT NULL, 
         # filedate TEXT NOT NULL, 
+        # totalstatements INT NOT NULL, 
         # integrationdate TEXT NOT NULL
-        table_integrated_files = ("integratedfile", "filename", "filedate", "integrationdate")
-        # table "Statements" : "CREATE TABLE IF NOT EXISTS Statements (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, account TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));"
+        table_integrated_files = ("integratedfile", "filename", "filedate", "totalstatements", "integrationdate")
+        # table "Statements" : "CREATE TABLE IF NOT EXISTS Statements (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, statementid TEXT NOT NULL, account TEXT NOT NULL, statementcode TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));"
         # id INTEGER PRIMARY KEY AUTOINCREMENT, 
         # format TEXT NOT NULL, 
+        # statementid TEXT NOT NULL, 
         # account TEXT NOT NULL, 
+        # statementcode TEXT NOT NULL, 
         # openingbalancedate TEXT NOT NULL, 
         # openingbalanceamount REAL NOT NULL, 
         # closingbalancedate TEXT NOT NULL, 
@@ -65,21 +68,43 @@ class ctrl_mt940:
         # segment TEXT NOT NULL, 
         # statement TEXT, 
         # originalfile TEXT
-        table_statements = ("format", "account", "openingbalancedate", "openingbalanceamount", "closingbalancedate", "closingbalanceamount", "sequencecomplete", "sequence", "segment", "originalfile")
-        table_statements_dups = ("format", "account", "openingbalancedate", "openingbalanceamount", "closingbalancedate", "closingbalanceamount", "sequencecomplete", "sequence", "segment", "originalfile")
+        table_statements = ("format", "statementid", "account", "statementcode", "openingbalancedate", "openingbalanceamount", "closingbalancedate", "closingbalanceamount", "sequencecomplete", "sequence", "segment", "originalfile")
+        table_statements_dups = ("format", "statementid", "account", "statementcode", "openingbalancedate", "openingbalanceamount", "closingbalancedate", "closingbalanceamount", "sequencecomplete", "sequence", "segment", "originalfile")
 
         if arg2 == "INIT_DB": # Initialize Database - Create tables
             sqlite_connection.create_table("Accounts", "CREATE TABLE IF NOT EXISTS Accounts (id INTEGER PRIMARY KEY AUTOINCREMENT, account TEXT NOT NULL, iban TEXT, laststatementdate TEXT NOT NULL, expected INT NOT NULL);")
             sqlite_connection.free_query("CREATE UNIQUE INDEX accounts_account on accounts(account);")
-            sqlite_connection.create_table("IntegratedFiles", "CREATE TABLE IF NOT EXISTS IntegratedFiles (id INTEGER PRIMARY KEY AUTOINCREMENT, integratedfile TEXT NOT NULL, filename TEXT NOT NULL, filedate TEXT NOT NULL, integrationdate TEXT NOT NULL);")
+            sqlite_connection.create_table("IntegratedFiles", "CREATE TABLE IF NOT EXISTS IntegratedFiles (id INTEGER PRIMARY KEY AUTOINCREMENT, integratedfile TEXT NOT NULL, filename TEXT NOT NULL, filedate TEXT NOT NULL, totalstatements INT NOT NULL, integrationdate TEXT NOT NULL);")
             sqlite_connection.free_query("CREATE UNIQUE INDEX IntegratedFiles_integratedfile on IntegratedFiles(integratedfile);")
-            sqlite_connection.create_table("Statements", "CREATE TABLE IF NOT EXISTS Statements (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, account TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));")
-            sqlite_connection.create_table("StatementsDups", "CREATE TABLE IF NOT EXISTS StatementsDups (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, account TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));")
+            sqlite_connection.create_table("Statements", "CREATE TABLE IF NOT EXISTS Statements (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, statementid TEXT NOT NULL, account TEXT NOT NULL, statementcode TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));")
+            sqlite_connection.create_table("StatementsDups", "CREATE TABLE IF NOT EXISTS Statements (id INTEGER PRIMARY KEY AUTOINCREMENT, format TEXT NOT NULL, statementid TEXT NOT NULL, account TEXT NOT NULL, statementcode TEXT NOT NULL, openingbalancedate TEXT NOT NULL, openingbalanceamount REAL NOT NULL, closingbalancedate TEXT NOT NULL, closingbalanceamount REAL NOT NULL, sequencecomplete TEXT NOT NULL, sequence TEXT NOT NULL, segment TEXT NOT NULL, statement TEXT, originalfile TEXT, FOREIGN KEY (account) REFERENCES Accounts (account), FOREIGN KEY (originalfile) REFERENCES IntegratedFiles (integratedfile));")
 
         elif arg2 == "INTEG": # Integrate MT940 files in database
-            # Read mt940 file
+            ### Flow description
+            # validate args ?!?
+            # DONE # get in file attributes
+            # DONE # read file
+            # DONE # split statements into list
+            # DONE # save process to IntegratedFiles
+            # DONE # foreach statement
+            #  check account exists
+            #   if not save account to Accounts
+            #  check statement exists
+            #   if not save statement
+            #          update Accounts
+            #   if yes save statementdups
+
+
+            # Validate entered args
+
+            # Read mt940 file into list of statements
             open_mt940 = psc_util.psc_read_text_file(arg4, "MT940")
-            
+
+            # Create IntegratedFiles record
+            filedate = datetime.fromtimestamp(os.path.getmtime(arg4))
+            list_values = f"('{arg4}##{filedate}', '{arg4}', '{filedate}', {len(open_mt940)}, '{datetime.now()}')"
+            sqlite_connection.insert_record("IntegratedFiles", table_integrated_files, list_values)
+
             for i in enumerate(open_mt940):
                 mt940_statement = psc_util.psc_dict_mt940(i)
 
@@ -111,9 +136,10 @@ class ctrl_mt940:
             pass
 
         elif arg2 == "EXTRACT": # Extract to file statements from requested account/sequence numbers
+            # Read ini file with account list for account number update and other replace instructions
             pass
 
-        elif arg2 == "LOG_L7D": # list log for last 7 days
+        elif arg2[0:3] == "LOG_": # Format LOG_#99 - list log for last n days Processes/Statements/Account
             pass
 
         else:

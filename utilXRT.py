@@ -114,7 +114,6 @@ try:
         access_connection = connectMSAccess(sys.argv[2], "MASTER")
 
         print("Select before updates")
-        print(psc_logs.logging.root.level)
         with open('before.txt', 'w') as f:
             for i, val in enumerate(access_connection.select_records("SOLDES_RIB_RAPPRO", 5000)):
                 f.write(val)
@@ -208,10 +207,10 @@ try:
         print(psc_msg("usage"))
         logger.info("No valid options selected.")
 
-except SystemExit:
-    logger.exception("")
+except SystemExit as e:
+    logger.exception(f"System Exit Exception: {e}")
 except FileNotFoundError as e:
-    logger.info("File not found.")
+    logger.info("Error: File not found.")
     logger.exception(f"{e}")
 except Exception as e: # catch *all* exceptions
     logger.exception(f"Unexpected Error: {e}")

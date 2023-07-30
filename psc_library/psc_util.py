@@ -22,12 +22,14 @@ def psc_read_text_file(filename, fileformat="NONE"):
 
                     #statement = bytes.decode(bytes_file_string[statement_start:statement_end], 'utf-8')
                     statement = psc_dict_mt940(bytes_file_string[statement_start:statement_end])
-                    print(statement[":25:"])
-                    print(statement[":28C:"])
-                    print(statement[":28C:A"])
-                    print(statement[":28C:B"])
-                    print(statement[":60a:"])
-                    print(statement[":62a:"])
+                    #print(statement[":20:"])
+                    #print(statement[":25:"])
+                    #print(statement[":28C:"])
+                    #print(statement[":28C:A"])
+                    #print(statement[":28C:B"])
+                    #print(statement[":60a:"])
+                    #print(statement[":62a:"])
+
                     #print(statement[":62a:1"])
                     #print(statement[":62a:2"])
                     #print(statement[":62a:3"])
@@ -51,6 +53,8 @@ def psc_read_text_file(filename, fileformat="NONE"):
         psc_logs.logger.exception(f"{e}")
 
 def psc_dict_mt940(bytestring):
+    start20 = bytestring.find(b":20:")+4
+    end20 = bytestring[bytestring.find(b":20:")+4:].find(b"\n")
     start25 = bytestring.find(b":25:")+4
     end25 = bytestring[bytestring.find(b":25:")+4:].find(b"\n")
     start28C = bytestring.find(b":28C:")+5
@@ -67,6 +71,7 @@ def psc_dict_mt940(bytestring):
     end62a = bytestring[bytestring.find(b":62")+5:].find(b"\n")
     
     dict_mt940 = {
+        ":20:": bytes.decode(bytestring[start20:start20+end20], 'utf-8'),
         ":25:": bytes.decode(bytestring[start25:start25+end25], 'utf-8'),
         ":28C:": bytes.decode(bytestring[start28C:start28C+end28C], 'utf-8'),
         ":28C:A": bytes.decode(a28C, 'utf-8'),

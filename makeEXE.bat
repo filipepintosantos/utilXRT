@@ -10,7 +10,53 @@ rem git add .
 rem git commit -m "Short changes description"
 rem git push origin master
 rem 
-rem # use on vm - Commit if necessary then Pull
+rem rem # use on vm - Commit if necessary then Pull
 rem git commit -m "Short changes description"
 rem git pull --force
 rem 
+
+rem ### CREATE VIRTUAL ENVIRONMENT
+rem # pip install virtualenv
+rem # cd KProjects\utilXRT
+rem # virtualenv venv
+
+rem ### ACTIVATE VIRTUAL ENVIRONMENT
+rem # cd KProjects\utilXRT
+rem # .\venv\scripts\activate
+
+rem ### UPDATE requirements.txt
+rem # pip freeze > requirements.txt
+
+rem ### INSTALL FROM requirements.txt
+rem # pip install -r requirements.txt
+
+rem ### INSTALL NEEDED LIBRARIES
+rem # pip install PyInstaller
+rem # pip install ...
+
+rem ### CREATE .EXE
+rem # call .\venv\scripts\activate
+rem # pyinstaller utilXRT.py
+rem # OR
+rem # pyinstaller --onefile utilXRT.py
+
+rem ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ### RUN PROGRAM SCRIPT ###
+rem # python utilXRT.py -c external\filesin\BPI.a0 external\filesin\BPI.201509.txt
+rem # python utilXRT.py Rappro external\databases\bd1.mdb external\filesin\BPI.201509.txt debug
+
+rem ### Options for MT940
+rem # INIT_DB
+rem # python utilXRT.py CtrlMT940 INIT_DB external\databases\mt940demo.db filler filler debug
+rem # INTEG
+rem # python utilXRT.py CtrlMT940 INTEG external\databases\mt940demo.db external\filesin\MT940\Mzn_A12.MT940 filler debug
+rem # EXTRACT
+rem # CLEAR_DUPS
+rem # LOG_L7D
+rem # python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\filesin\MT940\Mzn_A12.MT940 external\filesout\test.txt debug
+
+rem ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
+rem # cd tests
+rem # pytest
+rem # pytest --cov=utilXRT
+rem # cd ..
+
