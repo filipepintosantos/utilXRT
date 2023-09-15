@@ -41,6 +41,14 @@ def psc_read_text_file(filename, fileformat="NONE"):
                 if not(content_list):
                     print("No statements found in file")
 
+            elif fileformat == "XML":
+                content = file.read().replace("\n", "")
+                while content.find("> ") > -1:
+                    content = content.replace("> ", ">")
+                while content.find("><?xml version") > -1:
+                    content = content.replace("><?xml version", ">\n<?xml version")
+                content_list = content.splitlines()
+                
             else:
                 content_list = file.readlines()
                 content_list = [x.strip() for x in content_list]

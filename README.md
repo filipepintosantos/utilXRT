@@ -3,25 +3,18 @@ Pinto Santos Consultores - utilXRT
 
 Several validations and fixes to automate Run Procedures
 
-1 compare AFB120 with XRT banque format (after manual conversion)
-
-2 Validate (and fix) Rappro balances
-3 Validate (and fix) RDB balances
-
-4 Find (and extract) account in file (AFB120 / banque / MT940)
-5 Find (and extract) bad blocks in file (AFB120 / banque)
-
-6 Validate SCT SDD ?
 
 
 ### Development plan
+- CAMT054 fixer - create Ntry's for each TxDtls
+
+- Everything below this line is for second plan
+-
 - MT940 Manager
 - read MT940 from file
 - write MT940 to file - with criteria Account / Sequence / Date - options recode account
 - save MT940 to database - no duplicates - key Account + Statement Sequence
 - list from database by account / statement sequence - with criteria Account / Sequence / Date
-- 
-- Everything below this line is for second plan
 - 
 - improve project structure
 - use pytest !!!

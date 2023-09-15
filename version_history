@@ -1,12 +1,16 @@
 utilXRT Version History
 
-2.0.1
+0.3.0
+Functional
+    XML Manager - project CAMT054 CACIB fix
+
+0.2.1
 Project Structure
     Logging recoded as class
 Functional
     MT940 Manager - Database inicialization working
 
-2.0.0
+0.2.0
 Project Structure
     Back to start
     Start developing methods thinking of using unit tests
@@ -14,7 +18,7 @@ Project Structure
 Functional
     Redefine development plan - main option MT940 Manager
 
-1.3.5
+0.1.35
 Project Structure
     New options are out of main py file - prefix spec
     Naming convention prefix: crud (datadases), gen (general purpose), spec (argument options)
@@ -22,13 +26,13 @@ Functional
     New future option Ctrl_MT940 to control history of MT940 received files
     New future crud for SQLite
 
-1.3.4
+0.1.34
 Project Structure
     ---
 Functional
     Option RDB - Ready to test
 
-1.3.3
+0.1.33
 Project Structure
     ---
 Functional
@@ -36,28 +40,28 @@ Functional
     Option Rappro - Fix date format
     Option Rappro - Update only if date is equal or newer than database
 
-1.3.2
+0.1.32
 Project Structure
     ---
 Functional
     Option Rappro - Fix account read size
     Option Rappro - Validate account in Database before update
 
-1.3.1
+0.1.31
 Project Structure
     Using another Python instalation for 32bit distribution
 Functional
     Option Rappro - Database connection by command argument 2
     Build 32bit
 
-1.3.0
+0.1.30
 Project Structure
     Logging - Logging into crud_msaccess
 Functional
     Option Rappro fully functional
     Build for autonomous use
 
-1.2.2
+0.1.22
 Project Structure
     Pytest running - set first test
     Move I/O functions to psc_util.py
@@ -65,32 +69,32 @@ Project Structure
 Functional
     Manage text files to work with Rappro and RDB options
 
-1.2.1
+0.1.21
 Project Structure
     Create Test folder - prepare for pytest
 Functional
     Use function attributes tp connect to MS_Access databases
 
-1.2.0
+0.1.20
 Project Structure
     Rename project to utilXRT
     Folder restructure
 Functional
     Connection to MS_Access databases
 
-1.1.0
+0.1.1
 Project Structure
     Messages go into separate py file
     Version information go into separate py file
 Functional
     first parameter fixed as execution -option
 
-1.0.0
+0.1.0
 Functional Build Released
 Functional
     Translated last char of the amount in the AFB120
 
-0.8.0
+0.0.8
 First Build used in autonomous test
 
 0.0.1

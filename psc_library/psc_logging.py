@@ -26,6 +26,7 @@ class log_class:
         self.logger.info("#"*60)
         self.logger.setLevel(logging.INFO)
         self.logger.info("Logging level set to INFO.")
+        self.logger.setLevel(logging.DEBUG)
 
     def set_level(self, level):
         if level == "DEBUG":

@@ -54,6 +54,10 @@ rem # CLEAR_DUPS
 rem # LOG_L7D
 rem # python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\filesin\MT940\Mzn_A12.MT940 external\filesout\test.txt debug
 
+rem ### Options for CAMT054
+rem # CACIB
+rem # python utilXRT.py CAMT054 CACIB external\databases\camt54demo.db external\filesin\XML\CAMT054\camt054_multiplereturns.xml external\filesout\XML\CAMT054\camt054_multiplereturns.xml Y external\filesin\XML\XSD\camt.054.001.02.xsd debug
+
 rem ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
 rem # cd tests
 rem # pytest

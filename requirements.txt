@@ -5,6 +5,7 @@ distlib==0.3.6
 exceptiongroup==1.1.1
 filelock==3.9.0
 iniconfig==2.0.0
+lxml==4.9.3
 packaging==23.1
 pefile==2023.2.7
 platformdirs==3.0.0

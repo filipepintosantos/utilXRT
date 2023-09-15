@@ -98,7 +98,7 @@ try:
         """
         compare_files()
 
-    elif sys.argv[1] == "msaDrivers": # Check for installed Drivers
+    elif sys.argv[1] == "msaDrivers": # Check for installed Access Drivers
         from psc_library.psc_crud_msaccess import check_drivers
         check_drivers()
 
@@ -203,6 +203,13 @@ try:
         logger.info(result)
         print(result)
                 
+    elif sys.argv[1] == "CAMT054": # Options for manupulation of xml sepa files Camt054
+        from psc_library.psc_xml_sepas import camt054_cacib
+        camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
+        result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
+        logger.info(result)
+        print(result)
+
     else: # No valid options selected.
         print(psc_msg("usage"))
         logger.info("No valid options selected.")
