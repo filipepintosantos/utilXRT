@@ -56,7 +56,7 @@ rem # python utilXRT.py CtrlMT940 INTEG external\databases\mt940.db external\fil
 
 rem ### Options for CAMT054
 rem # CACIB
-rem # python utilXRT.py CAMT054 CACIB external\databases\camt54demo.db external\filesin\XML\CAMT054\camt054_multiplereturns.xml external\filesout\XML\CAMT054\camt054_multiplereturns.xml Y external\filesin\XML\XSD\camt.054.001.02.xsd debug
+rem # python utilXRT.py CAMT054 CACIB external\databases\camt54demo.db external\filesin\XML\CAMT054\camt054_demo.xml external\filesout\XML\CAMT054\camt054_demo_out.xml N external\filesin\XML\XSD\camt.054.001.02.xsd debug
 
 rem ### TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS TESTS ###
 rem # cd tests

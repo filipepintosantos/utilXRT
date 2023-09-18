@@ -92,24 +92,40 @@ try:
     # Alternative Options - Arg 1
     logger.info(f"Process argument '{sys.argv[1]}'.")
 
-    if sys.argv[1] == "-c" or sys.argv[1] == "compare":
-        """
-        Validate if necessary arguments exist
-        """
-        compare_files()
-
-    elif sys.argv[1] == "msaDrivers": # Check for installed Access Drivers
+    if sys.argv[1] == "msaDrivers": # Check for installed Access Drivers
         from psc_library.psc_crud_msaccess import check_drivers
         check_drivers()
 
+    elif sys.argv[1] == "CAMT054": # Options for manupulation of xml sepa files Camt054
+        from psc_library.psc_xml_sepas import camt054_cacib
+        camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
+        result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
+        logger.info(result)
+        print(result)
+
+    else: # No valid options selected.
+        print(psc_msg("usage"))
+        logger.info("No valid options selected.")
+
+except SystemExit as e:
+    logger.exception(f"System Exit Exception: {e}")
+except FileNotFoundError as e:
+    logger.info("Error: File not found.")
+    logger.exception(f"{e}")
+except Exception as e: # catch *all* exceptions
+    logger.exception(f"Unexpected Error: {e}")
+
+logger.info("Processing finished. Exited")
+sys.exit()
+
+### Options to recover later
+"""
     elif sys.argv[1] == "Rappro": # Option Balances Rappro
-        """
-        Validate if necessary arguments exist
-        Aceder à BD Access - Check
-        Aceder ao ficheiro bancário ou Excel com os extratos - Check
-        Ler todas as linhas 07 - Check
-        Alterar as contas identificadas na BD de saldos - Check
-        """
+        # Validate if necessary arguments exist
+        # Aceder à BD Access - Check
+        # Aceder ao ficheiro bancário ou Excel com os extratos - Check
+        # Ler todas as linhas 07 - Check
+        # Alterar as contas identificadas na BD de saldos - Check
         from psc_library.psc_crud_msaccess import connectMSAccess
         access_connection = connectMSAccess(sys.argv[2], "MASTER")
 
@@ -150,13 +166,12 @@ try:
         access_connection.close_conn()
 
     elif sys.argv[1] == "RDB": # Option Balances RDB (REFONTE)
-        """
-        Validate if necessary arguments exist
-        Aceder à BD Access - Check
-        Aceder ao ficheiro bancário ou Excel com os extratos
-        Ler todas as linhas 07
-        Alterar as contas identificadas na BD de saldos
-        """
+        # Validate if necessary arguments exist
+        # Aceder à BD Access - Check
+        # Aceder ao ficheiro bancário ou Excel com os extratos
+        # Ler todas as linhas 07
+        # Alterar as contas identificadas na BD de saldos
+
         from psc_library.psc_crud_msaccess import connectMSAccess
         access_connection = connectMSAccess(sys.argv[2], "MASTER")
         table_rdb = "CONTROLE_DATE_SOLDE"
@@ -196,31 +211,14 @@ try:
 
         access_connection.close_conn()
 
+    elif sys.argv[1] == "-c" or sys.argv[1] == "compare":
+        # Validate if necessary arguments exist
+        compare_files()
+
     elif sys.argv[1] == "CtrlMT940": # Options for analysis of received MT940 statements
         from psc_library.psc_spec_ctrl_mt940 import ctrl_mt940
         ctrl_mt940(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
         result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
         logger.info(result)
         print(result)
-                
-    elif sys.argv[1] == "CAMT054": # Options for manupulation of xml sepa files Camt054
-        from psc_library.psc_xml_sepas import camt054_cacib
-        camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
-        result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
-        logger.info(result)
-        print(result)
-
-    else: # No valid options selected.
-        print(psc_msg("usage"))
-        logger.info("No valid options selected.")
-
-except SystemExit as e:
-    logger.exception(f"System Exit Exception: {e}")
-except FileNotFoundError as e:
-    logger.info("Error: File not found.")
-    logger.exception(f"{e}")
-except Exception as e: # catch *all* exceptions
-    logger.exception(f"Unexpected Error: {e}")
-
-logger.info("Processing finished. Exited")
-sys.exit()
+"""

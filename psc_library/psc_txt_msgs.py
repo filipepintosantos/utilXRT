@@ -13,6 +13,7 @@ info = VersionData()
 program = info.program
 version = info.version
 copyright = info.copyright
+copyright = ""
 authors = info.authors
 last_update = info.last_update
 
@@ -21,12 +22,12 @@ def psc_msg(msg_code):
 
     # standard version message
     if msg_code == "version":
-        message  = program+" - "+version+" - "+copyright+"\n"+authors+" - "+last_update+"\n"
+        message  = program+" - "+version+" - "+copyright+"\n"+authors+" - "+last_update[0:7]+"\n"
 
     elif msg_code == "version1":
-        message  = program+" - "+version+" - "+copyright
+        message  = program+" - "+version +" - "+copyright
     elif msg_code == "version2":
-        message  = authors+" - "+last_update
+        message  = authors+" - "+last_update[0:7]
 
     # standard history message
     elif msg_code == "history":
@@ -41,6 +42,7 @@ def psc_msg(msg_code):
     # standard usage message - change message according to arg2
     elif msg_code == "usage":
         message  = "\nUsage: utilXRT main_option [option_args]\nType utilXRT help for help (this message)\nType utilXRT license for full MIT License\n\nOptions:\n\n"
+        message += "utilXRT CAMT054 CACIB sqlite_database file_in file_out (validate XSD Y/N) (XSD used in validation) (debug)"
 
     else:
         logger.debug("Message called with invalid argument.")

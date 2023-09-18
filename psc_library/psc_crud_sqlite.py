@@ -125,13 +125,14 @@ class connectSQLite:
         try:
             logger.debug(f"Executing free query:")
             logger.debug(query)
-            return self.cur.execute(query).fetchall()
+            self.cur.execute(query)
+            result = self.cur.fetchall()
         except Exception as e: # catch *all* exceptions
             logger.debug(f"Error executing query: {e}")
         else:
             self.conn.commit()
             logger.debug(f"Query executed successfully.")
-
+            return result
 
 def check_database(database):
     ''' Check if the database exists or not '''

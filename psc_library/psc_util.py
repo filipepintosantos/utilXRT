@@ -47,6 +47,7 @@ def psc_read_text_file(filename, fileformat="NONE"):
                     content = content.replace("> ", ">")
                 while content.find("><?xml version") > -1:
                     content = content.replace("><?xml version", ">\n<?xml version")
+                content = content.replace("'", "''")
                 content_list = content.splitlines()
                 
             else:

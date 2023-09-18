@@ -1,5 +1,5 @@
 ### utilXRT
-Pinto Santos Consultores - utilXRT
+Pinto Santos - utilXRT
 
 Several validations and fixes to automate Run Procedures
 
