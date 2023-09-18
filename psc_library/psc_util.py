@@ -6,7 +6,7 @@ Library for useful generic functions
 @Author: Filipe Santos
 """
 
-import psc_logging as psc_logs
+import psc_library.psc_logging as psc_logs
 
 def psc_read_text_file(filename, fileformat="NONE"):
     try:

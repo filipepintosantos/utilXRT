@@ -12,8 +12,10 @@ sys.path.append("..\\psc_library")
 print(sys.path)
 import pytest
 
-# Test MSAccess CRUD
 import psc_library.psc_crud_msaccess as psc_access
+import psc_library.psc_crud_sqlite as psc_sqlite
+
+# Test MSAccess CRUD
 dir(psc_access.connectMSAccess)
 
 connDBAccess = psc_access.connectMSAccess("..\\external\\databases\\bd1.mdb", "MASTER")
@@ -23,7 +25,6 @@ for table in connDBAccess.show_tables():
     print(table.table_name)
 
 # Test SQLite CRUD
-import psc_library.psc_crud_sqlite as psc_sqlite
 dir(psc_sqlite.connectSQLite)
 
 connSQLite = psc_sqlite.connectSQLite("..\\external\\databases\\mt940.db")

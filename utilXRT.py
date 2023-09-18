@@ -8,12 +8,14 @@ Several validations and fixes to automate Run Procedures
 
 import sys
 sys.path.append("psc_library")
-from array import array
+#from array import array
 from datetime import datetime
 
 import psc_library.psc_util as psc_util
 from psc_library.psc_logging import logger
 from psc_library.psc_txt_msgs import psc_msg
+from psc_library.psc_crud_msaccess import check_drivers
+from psc_library.psc_xml_sepas import camt054_cacib
 
 print(psc_msg("version"))
 logger.info(psc_msg("version1"))
@@ -93,12 +95,11 @@ try:
     logger.info(f"Process argument '{sys.argv[1]}'.")
 
     if sys.argv[1] == "msaDrivers": # Check for installed Access Drivers
-        from psc_library.psc_crud_msaccess import check_drivers
         check_drivers()
 
     elif sys.argv[1] == "CAMT054": # Options for manupulation of xml sepa files Camt054
-        from psc_library.psc_xml_sepas import camt054_cacib
-        camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
+        #camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5], sys.argv[6], sys.argv[7])
+        camt054_cacib(sys.argv[2], sys.argv[3], sys.argv[4], sys.argv[5])
         result = f"Process {sys.argv[1]} with option {sys.argv[2]} completed successfully."
         logger.info(result)
         print(result)

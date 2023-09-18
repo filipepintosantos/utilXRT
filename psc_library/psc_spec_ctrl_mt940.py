@@ -25,9 +25,9 @@ validar se já registou o extrato (possiveis duplicados) se sim, guarda em outra
 
 import os
 from datetime import datetime
-import psc_util as psc_util
-from psc_crud_sqlite import connectSQLite
-from psc_logging import logger
+import psc_library.psc_util as psc_util
+from psc_library.psc_crud_sqlite import connectSQLite
+from psc_library.psc_logging import logger
 
 class ctrl_mt940:
     def __init__(self, arg2, arg3, arg4="", arg5=""):

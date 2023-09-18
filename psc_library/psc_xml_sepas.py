@@ -18,10 +18,10 @@ save to file
 
 import os
 from datetime import datetime
-import psc_util as psc_util
-from psc_crud_sqlite import connectSQLite
-from psc_crud_sqlite import check_database
-from psc_logging import logger
+import psc_library.psc_util as psc_util
+from psc_library.psc_crud_sqlite import connectSQLite
+#from psc_library.psc_crud_sqlite import check_database
+from psc_library.psc_logging import logger
 
 class camt054_cacib:
     def __init__(self, arg2, arg3, arg4, arg5, arg6="N", arg7=None):
@@ -117,12 +117,12 @@ class camt054_cacib:
                 sqlite_connection.insert_record("camt054", table_camt054, list_values)
 
             #Validate xml
-            if arg7 == "Yes":
-                from xsd_validator import XsdValidator
-                #from lxml import etree
-                validator = XsdValidator(arg6)
-                print(validator.assert_valid(camt54))
-                print("")
+            #if arg7 == "Yes":
+            #    from xsd_validator import XsdValidator
+            #    ##from lxml import etree
+                #validator = XsdValidator(arg6)
+                #print(validator.assert_valid(camt54))
+                #print("")
                 #print("XML Errors list")
                 #for err in validator(camt54):
                 #    logger.info(f"Error: '{err}'.")
@@ -130,7 +130,6 @@ class camt054_cacib:
         #Extract records from table and save xml to file
         table_lines = sqlite_connection.select_records("camt054", "value_final", "document_number, line_number, id", None)
         lines = [item[0].replace("''", "'")+"\n" for item in table_lines]
-        #print(lines)
         xml_camt54_out = open(arg5, 'w')
         xml_camt54_out.writelines(lines)
         xml_camt54_out.close()
